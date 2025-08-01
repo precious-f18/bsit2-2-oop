@@ -6,9 +6,9 @@ public class Main {
         int totalNumber = 0;
         Scanner scanner = new Scanner (System.in);
 
-        for (int number = 1; number <= 5; number++) {
-            System.out.println("Enter number" + " " + number + ":");
-            totalNumber = scanner.nextInt();
+        for (int num = 1; num <= 5; num++) {
+            System.out.println("Enter number" + " " + num + ":");
+            int number = scanner.nextInt();
             totalNumber += number;
         }
             System.out.println("Total Number: " + totalNumber);
