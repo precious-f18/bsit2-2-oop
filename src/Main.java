@@ -1,17 +1,73 @@
-import java.util.Scanner;
-public class Main {
+import java.util.ArrayList;
 
+public class Order {
+    private String customerName;
+    private ArrayList<String> items;
+    private ArrayList<Double> prices;
+    private static int totalOrders = 0;
 
-    public static void main(String[] args) {
-        int totalNumber = 0;
-        Scanner scanner = new Scanner (System.in);
+    public Order(String customerName) {
+        this.customerName = customerName;
+        this.items = new ArrayList<>();
+        this.prices = new ArrayList<>();
+        totalOrders++;
+    }
 
-        for (int number = 1; number <= 5; number++) {
-            System.out.println("Enter number" + " " + number + ":");
-            totalNumber = scanner.nextInt();
-            totalNumber += number;
+    public void addItem(String item, double price) throws IllegalArgumentException {
+        if (price <= 0) {
+            throw new IllegalArgumentException("Invalid price: must be greater than 0");
         }
-            System.out.println("Total Number: " + totalNumber);
+        if (item == null || item.trim().isEmpty()) {
+            throw new IllegalArgumentException("Invalid item: cannot be empty");
+        }
+        items.add(item);
+        prices.add(price);
+    }
 
+    public double getTotalAmount() {
+        double sum = 0.0;
+        for (double price : prices) {
+            sum += price;
+        }
+        return sum;
+    }
+
+    public String getOrderSize() {
+        int count = items.size();
+        if (count == 0) return "Empty order";
+        if (count <= 3) return "Small";
+        if (count <= 6) return "Medium";
+        return "Large";
+    }
+
+    public void addMultipleItems(String[] items, double... prices) {
+        if (items.length != prices.length) {
+            throw new IllegalArgumentException("Items and prices count mismatch");
+        }
+        for (int i = 0; i < items.length; i++) {
+            try {
+                addItem(items[i], prices[i]);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+
+    public static int getTotalOrders() {
+        return totalOrders;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public int getItemCount() {
+        return items.size();
+    }
+
+    public String displayOrder() {
+        return "Order for " + customerName + ": " + getItemCount() +
+                " items, Total: $" + String.format("%.2f", getTotalAmount()) +
+                ", Size: " + getOrderSize();
     }
 }
