@@ -1,73 +1,56 @@
-import java.util.ArrayList;
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("═══ Food Ordering System ═══ \n");
+        System.out.println("Creating orders and adding items...");
 
-public class Order {
-    private String customerName;
-    private ArrayList<String> items;
-    private ArrayList<Double> prices;
-    private static int totalOrders = 0;
-
-    public Order(String customerName) {
-        this.customerName = customerName;
-        this.items = new ArrayList<>();
-        this.prices = new ArrayList<>();
-        totalOrders++;
-    }
-
-    public void addItem(String item, double price) throws IllegalArgumentException {
-        if (price <= 0) {
-            throw new IllegalArgumentException("Invalid price: must be greater than 0");
+        Order order1 = new Order("Erika Von");
+        try {
+            order1.addItem("Pizza", 14.5);
+            System.out.println("Item 'Pizza' added successfully");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
-        if (item == null || item.trim().isEmpty()) {
-            throw new IllegalArgumentException("Invalid item: cannot be empty");
+
+        try {
+            order1.addMultipleItems(new String[]{"Burger", "Fries"}, 7.50, 4.25);
+            System.out.println("Items added: Burger, Fries");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
-        items.add(item);
-        prices.add(price);
-    }
 
-    public double getTotalAmount() {
-        double sum = 0.0;
-        for (double price : prices) {
-            sum += price;
+        try {
+            order1.addItem("Hotdog", -5.00);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
-        return sum;
-    }
 
-    public String getOrderSize() {
-        int count = items.size();
-        if (count == 0) return "Empty order";
-        if (count <= 3) return "Small";
-        if (count <= 6) return "Medium";
-        return "Large";
-    }
-
-    public void addMultipleItems(String[] items, double... prices) {
-        if (items.length != prices.length) {
-            throw new IllegalArgumentException("Items and prices count mismatch");
+        try {
+            order1.addItem("", 4.00);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
-        for (int i = 0; i < items.length; i++) {
-            try {
-                addItem(items[i], prices[i]);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Error: " + e.getMessage());
-            }
-        }
-    }
 
-    public static int getTotalOrders() {
-        return totalOrders;
-    }
+        Order order2 = new Order("Helena Gracia");
+        order2.addMultipleItems(
+                new String[]{"Burger", "Fries", "Coke", "Salad", "Ice Cream"},
+                6.80, 4.20, 2.25, 5.00, 13.00
+        );
 
-    public String getCustomerName() {
-        return customerName;
-    }
+        Order order3 = new Order("John Riki");
+        order3.addMultipleItems(new String[]{"Pasta", "Juice"}, 13.00, 6.50);
 
-    public int getItemCount() {
-        return items.size();
-    }
+        System.out.println("\nOrder Results:");
+        System.out.println(order1.displayOrder());
+        System.out.println(order2.displayOrder());
+        System.out.println(order3.displayOrder());
 
-    public String displayOrder() {
-        return "Order for " + customerName + ": " + getItemCount() +
-                " items, Total: $" + String.format("%.2f", getTotalAmount()) +
-                ", Size: " + getOrderSize();
+        System.out.println("\nTotal orders created: " + Order.getTotalOrders());
+
+        Order largest = order1;
+        if (order2.getTotalAmount() > largest.getTotalAmount()) largest = order2;
+        if (order3.getTotalAmount() > largest.getTotalAmount()) largest = order3;
+
+        System.out.println("Largest order: " + largest.getCustomerName() + " ($" +
+                String.format("%.2f", largest.getTotalAmount()) + ")");
     }
 }
