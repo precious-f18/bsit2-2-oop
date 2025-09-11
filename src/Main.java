@@ -1,21 +1,29 @@
-public class Main {
-        public static void main(String[] args) {
-            Manager manager = new Manager("Alice Smith", 2001, 80000, "Engineering", 15000, 8);
-            System.out.println("\n--- Employee details ---");
-            manager.displayInfo();
-            manager.work();
-            System.out.println("Monthly Salary: $" + manager.calculateSalary());
+public class Intern extends Employee {
+    private String university;
+    private boolean isFullTime;
 
-            Developer developer = new Developer("Bob Johnson", 2002, 70000, "Engineering", "Java", 5);
-            System.out.println("\n--- Employee details ---");
-            developer.displayInfo();
-            developer.work();
-            System.out.println("Monthly Salary: $" + developer.calculateSalary());
-
-            Intern intern = new Intern("Charlie Brown", 2003, 30000, "Engineering", "Tech University", true);
-            System.out.println("\n--- Employee details ---");
-            intern.displayInfo();
-            intern.work();
-            System.out.println("Monthly Salary: $" + intern.calculateSalary());
-        }
+    public Intern(String name, int employeeId, double baseSalary, String department, String university, boolean isFullTime) {
+        super(name, employeeId, baseSalary, department);
+        this.university = university;
+        this.isFullTime = isFullTime;
+        System.out.println("Intern " + this.name + " from " + this.university + " has started");
     }
+
+    @Override
+    public double calculateSalary() {
+        return super.calculateSalary() * 0.5;
+    }
+
+    @Override
+    public void work() {
+        System.out.println(this.name + " is learning and assisting with tasks");
+    }
+
+    @Override
+    public void displayInfo() {
+        System.out.println("--- Employee Details ---");
+        super.displayInfo();
+        System.out.println("University: " + university);
+        System.out.println("Full-time: " + isFullTime);
+    }
+}
